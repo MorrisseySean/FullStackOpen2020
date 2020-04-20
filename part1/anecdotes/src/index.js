@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
 const Anecdote = (props) => {
-  const selected = 0;
-  return <p>{props.anecdote}</p>;
+  return (
+    <p>
+      {props.anecdote} <br /> Votes: {props.votes}
+    </p>
+  );
 };
 
 const Button = (props) => {
@@ -12,6 +15,7 @@ const Button = (props) => {
 
 const App = (props) => {
   const [selected, setSelected] = useState(0);
+  const [votes, setVotes] = useState(new Uint8Array(props.anecdotes.length));
 
   const randomAnecdote = () => {
     const min = 0;
@@ -19,13 +23,21 @@ const App = (props) => {
     return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
   };
 
+  const handleRandomClick = () => {
+    setSelected(randomAnecdote());
+  };
+
+  const handleVoteClick = () => {
+    const newVotes = [...votes];
+    newVotes[selected] += 1;
+    setVotes(newVotes);
+  };
+
   return (
     <div>
-      <Anecdote anecdote={props.anecdotes[selected]} />
-      <Button
-        handleClick={() => setSelected(randomAnecdote)}
-        text="Next anecdote"
-      />
+      <Anecdote anecdote={props.anecdotes[selected]} votes={votes[selected]} />
+      <Button handleClick={handleVoteClick} text="Vote" />
+      <Button handleClick={handleRandomClick} text="Next anecdote" />
     </div>
   );
 };
