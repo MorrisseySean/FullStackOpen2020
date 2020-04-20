@@ -1,6 +1,6 @@
 import React from "react";
 
-const Countries = ({ countries, filter }) => {
+const Countries = ({ countries, filter, setFilter }) => {
   const filteredList = countries.filter((country) =>
     country.name.toLowerCase().startsWith(filter.toLowerCase())
   );
@@ -8,7 +8,7 @@ const Countries = ({ countries, filter }) => {
     return <p>Too many matches. Please specify further.</p>;
   }
   if (filteredList.length > 1) {
-    return filteredList.map((country) => <p>{country.name}</p>);
+    return <CountryList countries={filteredList} setFilter={setFilter} />;
   }
   if (filteredList.length > 0) {
     return <FullCountry country={filteredList[0]} />;
@@ -24,7 +24,7 @@ const FullCountry = ({ country }) => {
       <p>Population: {country.population}</p>
       <h2>Languages</h2>
       <Languages languages={country.languages} />
-      <img src={country.flag} width="100px" alt="Flag" />
+      <img src={country.flag} alt="Flag" width="100px" />
     </div>
   );
 };
@@ -33,9 +33,22 @@ const Languages = ({ languages }) => {
   return (
     <ul>
       {languages.map((lang) => (
-        <li>{lang.name}</li>
+        <li key={lang.name}>{lang.name}</li>
       ))}
     </ul>
+  );
+};
+
+const CountryList = ({ countries, setFilter }) => {
+  return (
+    <div>
+      {countries.map((country) => (
+        <p key={country.alpha3Code}>
+          {country.name}
+          <button onClick={() => setFilter(country.name)}>Show</button>
+        </p>
+      ))}
+    </div>
   );
 };
 
