@@ -24,21 +24,26 @@ const Statistics = (props) => {
   if (total <= 0) {
     return <h2>No feedback given</h2>;
   }
-  return [
-    <Statistic text="Good" value={good} />,
-    <Statistic text="Neutral" value={neutral} />,
-    <Statistic text="Bad" value={bad} />,
-    <Statistic text="Total" value={total} />,
-    <Statistic text="Average" value={average} />,
-    <Statistic text="Positive" value={positive} />,
-  ];
+  return (
+    <table>
+      <tbody>
+        <Statistic text="Good" value={good} />
+        <Statistic text="Neutral" value={neutral} />
+        <Statistic text="Bad" value={bad} />
+        <Statistic text="Total" value={total} />
+        <Statistic text="Average" value={average} />
+        <Statistic text="Positive" value={positive} />
+      </tbody>
+    </table>
+  );
 };
 
 const Statistic = (props) => {
   return (
-    <p>
-      {props.text}: {props.value}
-    </p>
+    <tr>
+      <td>{props.text}:</td>
+      <td>{props.value}</td>
+    </tr>
   );
 };
 
