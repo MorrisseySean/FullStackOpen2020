@@ -18,15 +18,28 @@ const Statistics = (props) => {
   const neutral = props.stats[1];
   const bad = props.stats[2];
   const total = good + neutral + bad;
+  const average = (good - bad) / total;
+  const positive = (good / total) * 100 + "%";
 
+  if (total <= 0) {
+    return <h2>No feedback given</h2>;
+  }
   return [
-    <p>Good: {good}</p>,
-    <p>Neutral: {neutral}</p>,
-    <p>Bad: {bad}</p>,
-    <p>Total: {good + neutral + bad}</p>,
-    <p>Average: {(good - bad) / total}</p>,
-    <p>Positive: {(good / total) * 100}%</p>,
+    <Statistic text="Good" value={good} />,
+    <Statistic text="Neutral" value={neutral} />,
+    <Statistic text="Bad" value={bad} />,
+    <Statistic text="Total" value={total} />,
+    <Statistic text="Average" value={average} />,
+    <Statistic text="Positive" value={positive} />,
   ];
+};
+
+const Statistic = (props) => {
+  return (
+    <p>
+      {props.text}: {props.value}
+    </p>
+  );
 };
 
 const App = () => {
