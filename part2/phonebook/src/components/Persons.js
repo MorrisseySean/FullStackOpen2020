@@ -5,9 +5,11 @@ const Persons = (props) => {
   const filteredList = props.persons.filter((person) =>
     person.name.toLowerCase().startsWith(filter.toLowerCase())
   );
+
   return filteredList.map((person) => (
-    <p key={person.name}>
-      {person.name}: {person.number}
+    <p key={person.id}>
+      {person.name}: {person.number}{" "}
+      <button onClick={() => props.deleteHandler(person)}>Delete</button>
     </p>
   ));
 };

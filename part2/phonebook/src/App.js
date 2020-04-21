@@ -28,6 +28,14 @@ const App = () => {
     setnameFilter(event.target.value);
   };
 
+  const handleDelete = (person) => {
+    if (window.confirm(`Are you sure you want to delete ${person.name}`)) {
+      phonebookServices.deletePerson(person.id);
+      const filteredList = persons.filter((p) => p.id !== person.id);
+      setPersons(filteredList);
+    }
+  };
+
   const addName = (event) => {
     event.preventDefault();
     const newEntry = { name: newName, number: newNumber };
@@ -54,7 +62,11 @@ const App = () => {
         numValue={newNumber}
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} filter={nameFilter} />
+      <Persons
+        persons={persons}
+        filter={nameFilter}
+        deleteHandler={handleDelete}
+      />
     </div>
   );
 };
