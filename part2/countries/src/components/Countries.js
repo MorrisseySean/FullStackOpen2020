@@ -1,4 +1,5 @@
 import React from "react";
+import Weather from "./Weather";
 
 const Countries = ({ countries, filter, setFilter }) => {
   const filteredList = countries.filter((country) =>
@@ -25,6 +26,7 @@ const FullCountry = ({ country }) => {
       <h2>Languages</h2>
       <Languages languages={country.languages} />
       <img src={country.flag} alt="Flag" width="100px" />
+      <Weather country={country.name} />
     </div>
   );
 };

@@ -13,6 +13,7 @@ const App = () => {
       setCountries(response.data);
     });
   };
+
   useEffect(webHook, []);
 
   const filterHandler = (event) => {
