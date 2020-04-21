@@ -36,11 +36,24 @@ const App = () => {
     }
   };
 
+  const handleEdit = (person, newEntry) => {
+    if (
+      window.confirm(
+        `${person.name} is already in the phonebook, replace the old number with a new one?`
+      )
+    ) {
+      phonebookServices.update(person.id, newEntry).then((response) => {
+        setPersons(persons.map((p) => (p.id !== response.id ? p : response)));
+      });
+    }
+  };
+
   const addName = (event) => {
     event.preventDefault();
     const newEntry = { name: newName, number: newNumber };
-    if (persons.some((person) => person.name === newName)) {
-      alert(`${newName} is already added to the phonebook.`);
+    const match = persons.find((person) => person.name === newName);
+    if (match) {
+      handleEdit(match, newEntry);
     } else {
       phonebookServices.create(newEntry).then((newPerson) => {
         const addPerson = [...persons, newPerson];
