@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Persons from "./components/Persons";
 import Filter from "./components/Filter";
 import NewPersonForm from "./components/Form";
+import Notification from "./components/Notification";
 import phonebookServices from "./services/Phonebook";
 
 const App = () => {
@@ -9,6 +10,10 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [nameFilter, setnameFilter] = useState("");
+  const [notification, setNotification] = useState({
+    msg: null,
+    type: "success",
+  });
 
   // Get persons data from database
   const personsHook = () => {
@@ -33,6 +38,10 @@ const App = () => {
       phonebookServices.deletePerson(person.id);
       const filteredList = persons.filter((p) => p.id !== person.id);
       setPersons(filteredList);
+      setNotification({
+        msg: person.name + "was deleted from the phonebook",
+        type: "success",
+      });
     }
   };
 
@@ -42,9 +51,21 @@ const App = () => {
         `${person.name} is already in the phonebook, replace the old number with a new one?`
       )
     ) {
-      phonebookServices.update(person.id, newEntry).then((response) => {
-        setPersons(persons.map((p) => (p.id !== response.id ? p : response)));
-      });
+      phonebookServices
+        .update(person.id, newEntry)
+        .then((response) => {
+          setPersons(persons.map((p) => (p.id !== response.id ? p : response)));
+          setNotification({
+            msg: response.name + "was successfully edited.",
+            type: "success",
+          });
+        })
+        .catch((error) => {
+          setNotification({
+            msg: newEntry.name + "has been deleted from the server",
+            type: "error",
+          });
+        });
     }
   };
 
@@ -58,6 +79,10 @@ const App = () => {
       phonebookServices.create(newEntry).then((newPerson) => {
         const addPerson = [...persons, newPerson];
         setPersons(addPerson);
+        setNotification({
+          msg: newPerson.name + "was successfully added to the phonebook.",
+          type: "success",
+        });
       });
     }
   };
@@ -65,6 +90,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} setMsg={setNotification} />
       <Filter value={nameFilter} handler={handleFilter} />
       <h2>Add New</h2>
       <NewPersonForm
